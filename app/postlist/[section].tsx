@@ -2,6 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute, useTheme } from '@react-navigation/native';
 import { useNavigation, useRouter } from 'expo-router';
 import React, { useLayoutEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -67,7 +68,7 @@ export default function PostListScreen() {
   });
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <FlatList
         data={MOCK_POSTS}
         keyExtractor={(item) => item.id}
@@ -85,6 +86,6 @@ export default function PostListScreen() {
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-    </View>
+    </SafeAreaView>
   );
 }
