@@ -1,5 +1,4 @@
 import { db, storage } from '@/firebase/config';
-import { Picker } from '@react-native-picker/picker';
 import { useTheme } from '@react-navigation/native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -13,15 +12,27 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import "react-native-get-random-values";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { v4 as uuidv4 } from 'uuid';
 
+const categories = [
+  'Achievements',
+  'Learning',
+  'Curriculum',
+  'Co-curricular',
+  'Welfare',
+  'Leadership',
+  'Resources',
+  'Community',
+];
+
 export default function UploadPage() {
   const { colors } = useTheme();
-  const [category, setCategory] = useState('Achievements');
+  const [category, setCategory] = useState<string[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([]);
@@ -29,6 +40,11 @@ export default function UploadPage() {
   const [pdfs, setPdfs] = useState<DocumentPicker.DocumentPickerAsset[]>([]);
   const [uploading, setUploading] = useState(false);
 
+  const toggleCategory = (value: string) => {
+      setCategory((prev) =>
+      prev.includes(value) ? prev.filter((c) => c !== value) : [...prev, value]
+    );
+  };
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -88,6 +104,10 @@ const pickPdf = async () => {
       alert('Title is required');
       return;
     }
+    if (category.length === 0) {
+      alert('Please select at least one category');
+      return;
+    }
     setUploading(true);
     try {
       const imageUrls = await uploadFiles(images, 'images');
@@ -110,6 +130,7 @@ const pickPdf = async () => {
       setImages([]);
       setVideos([]);
       setPdfs([]);
+      setCategory([]);
     } catch (error) {
       console.error(error);
       alert('Upload failed');
@@ -121,21 +142,34 @@ const pickPdf = async () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={[styles.label, { color: colors.text }]}>Select Category</Text>
-        <View style={[styles.pickerWrapper, { borderColor: colors.border }]}>
-          <Picker
-            selectedValue={category}
-            onValueChange={(value) => setCategory(value)}
-            style={{ color: colors.text }}>
-            <Picker.Item label="Achievements" value="Achievements" />
-            <Picker.Item label="Learning" value="Learning" />
-            <Picker.Item label="Curriculum" value="Curriculum" />
-            <Picker.Item label="Activities" value="Activities" />
-            <Picker.Item label="Welfare" value="Welfare" />
-            <Picker.Item label="Leadership" value="Leadership" />
-            <Picker.Item label="Resources" value="Resources" />
-            <Picker.Item label="Community" value="Community" />
-          </Picker>
+
+        <Text style={[styles.label, { color: colors.text }]}>Select Categories</Text>
+
+        <View style={styles.chipContainer}>
+          {category.map((cat) => (
+            <View key={cat} style={[styles.chip, { backgroundColor: colors.primary + '22', borderColor: colors.primary }]}>
+              <Text style={{ color: colors.text }}>{cat}</Text>
+              <TouchableOpacity onPress={() => toggleCategory(cat)} style={styles.chipClose}>
+                <Text style={{ color: colors.text, marginLeft: 6 }}>×</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+
+        <View style={styles.categoryList}>
+          {categories.map((cat) => (
+            <TouchableOpacity
+              key={cat}
+              onPress={() => toggleCategory(cat)}
+              style={[styles.categoryButton, {
+                backgroundColor: category.includes(cat) ? colors.primary : 'transparent',
+                borderColor: colors.border,
+                borderWidth: 1
+              }]}
+            >
+              <Text style={{ color: category.includes(cat) ? '#fff' : colors.text }}>{cat}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
         <Text style={[styles.label, { color: colors.text }]}>Title *</Text>
@@ -221,4 +255,34 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 12,
   },
+  categoryButton: {
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 8,
+  },
+chipContainer: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  marginBottom: 12,
+  gap: 8,
+},
+
+chip: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingHorizontal: 10,
+  paddingVertical: 6,
+  borderRadius: 20,
+  borderWidth: 1,
+},
+
+chipClose: {
+  marginLeft: 4,
+},
+
+categoryList: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  gap: 10,
+},
 });
