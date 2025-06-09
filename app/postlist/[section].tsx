@@ -7,18 +7,6 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-type Post = {
-  id: string;
-  title: string;
-  date: string;
-};
-
-const MOCK_POSTS: Post[] = [
-  { id: '1', title: 'Term 1 Exam Results', date: '2025-06-01' },
-  { id: '2', title: 'Science Exhibition Highlights', date: '2025-05-20' },
-  { id: '3', title: 'Student of the Month', date: '2025-05-15' },
-];
-
 export default function PostListScreen() {
   const route = useRoute();
   const router = useRouter();
