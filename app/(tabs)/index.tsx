@@ -31,10 +31,14 @@ export default function HomeScreen() {
 
   const handlePress = (section: string) => {
     
-  router.push({
-    pathname: '/postlist/[section]',
-    params: { section },
-  });
+  if (section === 'marks') {
+    router.push('/coming-soon');
+  } else {
+    router.push({
+      pathname: '/postlist/[section]',
+      params: { section },
+    });
+  }
 };
 
   return (

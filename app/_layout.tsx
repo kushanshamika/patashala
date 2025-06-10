@@ -26,6 +26,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="postlist/[section]"  />
           <Stack.Screen name="post/[id]" />
+          <Stack.Screen name="coming-soon" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
