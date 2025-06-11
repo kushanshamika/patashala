@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Button,
   Keyboard,
@@ -22,13 +23,17 @@ export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [login, setLogin] = useState(false);
 
   const handleLogin = async () => {
+    setLogin(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.replace('/'); // Or any protected page
     } catch (error: any) {
       Alert.alert('Login Failed', error.message);
+    } finally {
+      setLogin(false);
     }
   };
 
@@ -59,7 +64,13 @@ export default function LoginScreen() {
             />
 
             <View style={styles.button}>
-              <Button title="Login" onPress={handleLogin} />
+              {
+                login? (
+                  <ActivityIndicator size="large"/>
+                ) : (
+                  <Button title="Login" onPress={handleLogin} />
+                )
+              }
             </View>
           </View>
         </TouchableWithoutFeedback>
