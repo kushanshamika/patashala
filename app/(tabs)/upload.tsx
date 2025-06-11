@@ -23,7 +23,7 @@ const categories = [
   'Achievements',
   'Learning',
   'Curriculum',
-  'Co-curricular',
+  'Activities',
   'Welfare',
   'Leadership',
   'Resources',
