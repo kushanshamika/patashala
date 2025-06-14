@@ -18,7 +18,6 @@ export default function PostVideo({ videoUrl }: { videoUrl: string }) {
       <VideoView
         player={player}
         allowsFullscreen
-        allowsPictureInPicture
         style={{ width: width - 32, aspectRatio: 16 / 9, borderRadius: 12 }}
       />
     </View>
