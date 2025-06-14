@@ -1,50 +1,134 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# Patashala
 
-## Get started
+## 📘 About
 
-1. Install dependencies
+**Patashala** is a mobile app designed to assist teachers and school administrators in documenting and managing activities as part of the evaluation process for assuring quality in education. It enables users to keep accurate, multimedia-rich records aligned with educational standards and processes.
 
+---
+
+## ✨ Key Features
+
+- 📸 **Multimedia Support**: Record activities using Photos, Videos, and attach PDFs.
+- 📝 **Easy Posting**: Teachers and admins can post school activities easily.
+- 🔍 **Post Viewer**: Browse, search, and read past records.
+- 🎯 **Evaluation Ready**: Structured for quality assurance documentation.
+- 🎨 **Dark/Light Themes**: Automatically adjusts to your device settings.
+
+---
+
+## 📱 Screenshots
+
+| Home Screen | Post List | Full Post View | Upload Screen | Dark Mode|
+|-------------|-----------|----------------|-----------|--------------|
+| ![Home](https://i.ibb.co/9kvBC6JQ/1.png) | ![List](https://i.ibb.co/rG5hgkCh/2.png) | ![Full](https://i.ibb.co/x8Y6RNhN/3.png) | ![Dark](https://i.ibb.co/cKHp82pS/4.png) | ![About](https://i.ibb.co/kVks6M0q/5.png) |
+
+---
+
+## 📥 Download
+
+📲 [**Get Patashala on Google Play**](https://play.google.com/store/apps/details?id=com.kushanshamika.patashala)
+
+---
+
+## 🚀 Getting Started
+
+To set up this project locally using Expo:
+
+1. **Clone the repository**  
    ```bash
-   npm install
+   git clone https://github.com/kushanshamika/patashala.git
+   cd patashala
    ```
 
-2. Start the app
+2. **Install dependencies**  
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
+3. **Firebase Configuration**  
+   Replace the contents of `firebase/config.ts` with your own Firebase project settings:
+
+   ```ts
+   // firebase/config.ts
+   export const firebaseConfig = {
+     apiKey: 'YOUR_API_KEY',
+     authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+     projectId: 'YOUR_PROJECT_ID',
+     storageBucket: 'YOUR_PROJECT_ID.appspot.com',
+     messagingSenderId: 'YOUR_SENDER_ID',
+     appId: 'YOUR_APP_ID',
+   };
+   ```
+
+   ✅ **Ensure the following Firebase services are enabled**:
+   - Authentication (Email/Password)
+   - Firestore Database
+
+4. **Run the app**  
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🤝 Contribution
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+We welcome all contributors!  
+If you have ideas, suggestions, or bug fixes, feel free to fork this repo, open issues, or submit pull requests.
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## 🛠️ Building
 
-```bash
-npm run reset-project
-```
+We use [EAS Build](https://docs.expo.dev/build/introduction/) for production builds.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+1. **Install EAS CLI**  
+   ```bash
+   npm install -g eas-cli
+   ```
 
-## Learn more
+2. **Login and configure**  
+   ```bash
+   eas login
+   eas build:configure
+   ```
 
-To learn more about developing your project with Expo, look at the following resources:
+3. **Trigger build**  
+   For Android:
+   ```bash
+   eas build --platform android
+   ```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+   For iOS:
+   ```bash
+   eas build --platform ios
+   ```
 
-## Join the community
+> Make sure your app is configured properly in `eas.json` and all secrets/environment variables are set if needed.
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 🧩 Tech Stack
+
+- [React Native](https://reactnative.dev/) with [Expo](https://expo.dev/)
+- [Firebase](https://firebase.google.com/) – Auth + Firestore
+- TypeScript
+
+---
+
+## 📞 Contact Us
+
+Interested in using **Patashala** at your school? We'd love to help!  
+Please contact us using the information below:
+
+**Patshala** යනු  ශ්‍රී ලංකාවේ රාජ්‍ය පාසල් වල ප්‍රමිති ගොනු පවත්වාගෙන යාම සදහා නිර්මාණය කරන ලද ජංගම මෘදුකාංග යෙදුමක් වේ. මෙය ඔබ පාසලටත් නොමිලයේ ලබාදීමට අප කටයුතු කරන්නෙමු.
+
+- 📧 Email: shamikakushan@gmail.com
+- 📱 Phone: +94 77 548 9485
+
+---
+
+Built with ❤️ for schools and teachers.
