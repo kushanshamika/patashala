@@ -17,7 +17,11 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.kushanshamika.patashala"
+      "package": "com.kushanshamika.patashala",
+      "permissions": [],
+      "blockedPermissions": [
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ]
     },
     "web": {
       "bundler": "metro",
