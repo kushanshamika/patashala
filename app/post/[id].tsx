@@ -6,7 +6,7 @@ import * as Linking from 'expo-linking';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SinglePostView() {
@@ -16,6 +16,7 @@ export default function SinglePostView() {
 
   const [post, setPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [imgLoading, setImgLoading] = useState(true);
 
     useEffect(() => {
       const fetchPost = async () => {
@@ -73,23 +74,31 @@ export default function SinglePostView() {
           {post.description}
         </Text>
 
-        {/* 🔹 Image Gallery */}
-        {post.images?.length > 0 && (
-          <View style={{ marginBottom: 16 }}>
-            <Text style={{ fontWeight: '600', fontSize: 18, marginBottom: 10, color: colors.text }}>
-              📷 Image Gallery
-            </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {post.images.map((uri: string, index: number) => (
-                <Image
-                  key={index}
-                  source={{ uri: uri }}
-                  style={{ width: 300, height: 200, marginRight: 12, borderRadius: 12 }}
-                />
-              ))}
-            </ScrollView>
-          </View>
-        )}
+
+        <Text style={{ marginVertical: 4, color: colors.text }}>📷 Image Gallery</Text>
+        {post.images?.map((uri: string, index: number) => {
+          
+          return (
+            <View key={index} style={{ marginBottom: 12, position: 'relative' }}>
+              {imgLoading && (
+                <View style={styles.imageLoader}>
+                  <ActivityIndicator size="small" color={colors.primary} />
+                </View>
+              )}
+              <Image
+                source={{ uri }}
+                style={{
+                  width: '100%',
+                  height: 200,
+                  borderRadius: 8,
+                  backgroundColor: imgLoading ? '#ccc' : 'transparent',
+                }}
+                resizeMode="cover"
+                onLoadEnd={() => setImgLoading(false)}
+              />
+            </View>
+          );
+        })}
 
         {/* 🔹 Videos */}
         {post.videos?.length > 0 && (
@@ -127,3 +136,16 @@ export default function SinglePostView() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+imageLoader: {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 1,
+},
+});
