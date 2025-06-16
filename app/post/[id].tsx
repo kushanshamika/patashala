@@ -1,12 +1,13 @@
 import PostVideo from '@/components/PostVideo';
-import { db } from '@/firebase/config';
+import { db, storage } from '@/firebase/config';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { doc, getDoc } from 'firebase/firestore';
+import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import { deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { deleteObject, ref } from 'firebase/storage';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SinglePostView() {
@@ -58,6 +59,47 @@ export default function SinglePostView() {
       return <Text style={{ margin: 20, color: colors.text }}>Post not found.</Text>;
     }
 
+  const deleteMediaFiles = async (urls: string[], folder: string) => {
+    const deletions = urls.map(async (url) => {
+      try {
+        const filePath = decodeURIComponent(url.split(`/${folder}%2F`)[1].split('?')[0]);
+        const fileRef = ref(storage, `${folder}/${filePath}`);
+        await deleteObject(fileRef);
+      } catch (error) {
+        console.warn(`Failed to delete ${folder} file:`, error);
+      }
+    });
+    await Promise.all(deletions);
+  };
+
+  const handleDelete = async () => {
+    Alert.alert('Delete Post', 'Are you sure you want to delete this post?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            if (!post) return;
+
+            await Promise.all([
+              deleteMediaFiles(post.images || [], 'images'),
+              deleteMediaFiles(post.videos || [], 'videos'),
+              deleteMediaFiles(post.pdfs || [], 'pdfs'),
+            ]);
+
+            await deleteDoc(doc(db, 'posts', id as string));
+            alert('Post deleted successfully');
+            router.back();
+          } catch (error) {
+            console.error('Failed to delete post:', error);
+            alert('Failed to delete post');
+          }
+        },
+      },
+    ]);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView contentContainerStyle={{ padding: 16}}>
@@ -74,8 +116,10 @@ export default function SinglePostView() {
           {post.description}
         </Text>
 
+        {post.images?.length > 0 && (
+          <Text style={{ marginVertical: 4, color: colors.text }}>📷 Image Gallery</Text>
+        )}
 
-        <Text style={{ marginVertical: 4, color: colors.text }}>📷 Image Gallery</Text>
         {post.images?.map((uri: string, index: number) => {
           
           return (
@@ -132,6 +176,13 @@ export default function SinglePostView() {
             ))}
           </View>
         )}
+        <View style={{ marginTop: 20 }}>
+          <Button 
+            title="Delete Post" 
+            color="red" 
+            onPress={handleDelete}
+            />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
